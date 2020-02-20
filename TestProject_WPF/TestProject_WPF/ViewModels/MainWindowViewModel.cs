@@ -16,7 +16,7 @@ namespace TestProject_WPF.ViewModels
         public ObservableList<Type> WinList
         {
             get { return winList; }
-            set { Set(ref winList, value, true); }
+            set { Set(ref winList, value); }
         }
 
         private int winList_SelectedIndex;
@@ -26,16 +26,43 @@ namespace TestProject_WPF.ViewModels
             set { Set(ref winList_SelectedIndex, value); }
         }
 
-        public ICommand GetStart { get; private set; }
+        private string displayText;
+        public string DisplayText
+        {
+            get { return displayText; }
+            set { Set(ref displayText, value); }
+        }
+
+        private string labelText;
+        public string LabelText
+        {
+            get { return labelText; }
+            set { Set(ref labelText, value); }
+        }
+
+        private string buttonText;
+        public string ButtonText
+        {
+            get { return buttonText; }
+            set { Set(ref buttonText, value); }
+        }
+
+
+        public ICommand ProgramStart_Click { get; private set; }
+        public ICommand Hyperlink_Click { get; private set; }
+
+        private bool IsDisplayingEnglish = true;
 
         [Obsolete]
         public MainWindowViewModel()
         {
             WinList = new ObservableList<Type>();
-            GetStart = new RelayCommand(SelectedWindowStart);
+            ProgramStart_Click = new RelayCommand(SelectedWindowStart);
+            Hyperlink_Click = new RelayCommand(LanguageChange);
+            LanguageChange();
 
             var assems = Assembly.GetExecutingAssembly().DefinedTypes;
-            var result = from a in assems where a.BaseType.Name == "Window" orderby a.Name select a;
+            var result = from a in assems where a.BaseType.Name == "Window" && a.Name != "MainWindow" orderby a.Name select a;
             WinList.AddRange(result);
         }
 
@@ -57,6 +84,24 @@ namespace TestProject_WPF.ViewModels
                 ApartmentState = ApartmentState.STA,
                 IsBackground = true,
             }.Start();
+        }
+
+        private void LanguageChange()
+        {
+            if (IsDisplayingEnglish)
+            {
+                LabelText = "Need English?";
+                DisplayText = "이 프로젝트에 Window.xaml을 추가하면,\n자동으로 모든 Window가 아래 리스트에 표시됩니다. \n(프로젝트 - 추가 - 새 항목 - Window.xaml)";
+                ButtonText = "프로그램 시작";
+                IsDisplayingEnglish = false;
+            }
+            else
+            {
+                LabelText = "Need Koeran?";
+                DisplayText = "If you just Add Window.xaml in this Project,\nautomatically added in list your Window.\n(Project - Add - New Item - Window.xaml)";
+                ButtonText = "Program Start";
+                IsDisplayingEnglish = true;
+            }
         }
     }
 }

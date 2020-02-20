@@ -6,16 +6,27 @@
         xmlns:local="clr-namespace:TestProject_WPF.Views"
         xmlns:viewmodel="clr-namespace:TestProject_WPF.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="400" Width="300">
+        Title="MainWindow" Height="370" Width="350">
     <Window.DataContext>
         <viewmodel:MainWindowViewModel/>
     </Window.DataContext>
     <Grid>
-        <DockPanel >
+        <DockPanel>
             <Border Margin="10" BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Top">
-                <TextBlock Margin="10,10,10,8" xml:space="preserve" Text="아래에 현재 프로젝트에 추가된 모든&#x0d;WPF Window가 표시됩니다." />
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="1*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Margin="10 0 10 10" xml:space="preserve" Text="{Binding DisplayText}" TextWrapping="WrapWithOverflow" Grid.Row="1" Grid.RowSpan="1"/>
+                    <TextBlock HorizontalAlignment="Right" TextAlignment="Right" Margin="0 0 4 0" Grid.RowSpan="2">
+                        <Hyperlink Command="{Binding Hyperlink_Click}">
+                            <TextBlock Text="{Binding LabelText}" FontSize="9" />
+                        </Hyperlink>
+                    </TextBlock>
+                </Grid>
             </Border>
-            <Button Margin="10,0" Height="23" DockPanel.Dock="Top" Content="Program Start" Command="{Binding GetStart}"/>
+            <Button Margin="10,0" Height="23" DockPanel.Dock="Top" Content="{Binding ButtonText}" Command="{Binding ProgramStart_Click}"/>
             <ListBox x:Name="WinListbox" Margin="10" DockPanel.Dock="Bottom" ItemsSource="{Binding WinList}" SelectedIndex="{Binding WinList_SelectedIndex, Mode=OneWayToSource}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>

@@ -10,7 +10,6 @@ namespace TestProject_WPF.Views
         public MainWindow()
         {
             InitializeComponent();
-            //this.DataContext = new ViewModels.MainWindowViewModel();
         }
     }
 }
